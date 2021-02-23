@@ -64,14 +64,12 @@ class HttpItem(symbol:String,apikey:String) {
   }
   
   def retrieveIntraData(interval: Int = Default.defaultInterval, outputSize: String = Default.defaultOutputSize): Unit = {
-
     val intervalInput = interval.toString + "min"
     val endPoint = s"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=$symbol&interval=$intervalInput&" +
       s"outputsize=$outputSize&apikey=$apikey"
-
-
+    
     val req = requests.get(endPoint)
-
+    
     if (req.statusCode == 200) {
       val records = ujson.read(req.text)
       timeZone = Some(records("Meta Data")("6. Time Zone").toString)
